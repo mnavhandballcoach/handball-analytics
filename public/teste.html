@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Teste Cloud Run Upload</title>
+</head>
+<body>
+  <h1>Teste de upload para Cloud Run</h1>
+
+  <form id="uploadForm" method="POST" enctype="multipart/form-data"
+        action="https://tracking-backend-git-1007213034860.europe-west1.run.app/process">
+    <div>
+      <label for="file">Vídeo:</label>
+      <input type="file" id="file" name="file" accept="video/*" required />
+    </div>
+
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" value="mcesarnavarro@gmail.com" required />
+    </div>
+
+    <div>
+      <label for="start_time">Start time (segundos):</label>
+      <input type="number" id="start_time" name="start_time" value="0" required />
+    </div>
+
+    <div>
+      <label for="duration">Duration (segundos):</label>
+      <input type="number" id="duration" name="duration" value="30" required />
+    </div>
+
+    <button type="submit">Enviar</button>
+  </form>
+
+  <hr />
+
+  <h2>Resposta:</h2>
+  <pre id="response"></pre>
+
+  <script>
+    const form = document.getElementById('uploadForm');
+    const responseEl = document.getElementById('response');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      responseEl.textContent = 'A enviar...';
+
+      const formData = new FormData(form);
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: formData
+        });
+
+        const text = await res.text();
+        responseEl.textContent = text;
+      } catch (err) {
+        responseEl.textContent = 'Erro de rede: ' + err;
+      }
+    });
+  </script>
+</body>
+</html>
+
+
